@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Mưa rơi – Lời nhắn dịu dàng 🌧</title>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: url("nen.png") center/cover no-repeat;
+  font-family: "Nunito", sans-serif;
+  position: relative;
+  touch-action: manipulation; /* ngăn zoom/scroll khi chạm */
+}
+
+/* Nền mưa */
+.rain {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url("mua_small.png") repeat;
+  background-size: contain;
+  opacity: 0.4;
+  animation: rainMove 2s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rainMove {
+  from { background-position: 0 0; }
+  to { background-position: 0 100%; }
+}
+
+/* Ánh sáng phản chiếu */
+.rain::before {
+  content: "";
+  position: absolute;
+  top: -100%; left: -100%;
+  width: 300%; height: 300%;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.2) 45%,
+    rgba(255,255,255,0) 70%
+  );
+  mix-blend-mode: screen;
+  animation: lightSweep 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes lightSweep {
+  0% { transform: translate(-50%, -50%) rotate(15deg); opacity: 0.5; }
+  50% { transform: translate(0%, 0%) rotate(15deg); opacity: 0.8; }
+  100% { transform: translate(50%, 50%) rotate(15deg); opacity: 0.5; }
+}
+
+/* Giọt mưa thật */
+.drop {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Mây */
+.cloud {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  user-select: none;
+}
+
+.cloud img {
+  width: 150px;
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+  transition: filter 0.3s ease;
+}
+
+/* Lời nhắn */
+.cloud span {
+  margin-top: 2px;
+  font-size: 14px;
+  color: #2f3b52;
+  background: rgba(255,255,255,0.85);
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.6s ease;
+  text-align: center;
+  max-width: 80vw;
+}
+
+/* Hiệu ứng sáng khi chạm */
+.cloud.active img {
+  filter: drop-shadow(0 0 18px #fff);
+  transform: scale(1.05);
+}
+
+/* Hiện lời nhắn */
+.cloud.showMsg span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Nền trời di chuyển nhẹ */
+.skyMove {
+  animation: skyShift 20s ease-in-out infinite alternate;
+}
+@keyframes skyShift {
+  from { background-position: 0 0; }
+  to { background-position: 100% 100%; }
+}
+
+/* Responsive điều chỉnh kích thước mây và chữ */
+@media (max-width: 768px) {
+  .cloud img { width: 120px; }
+  .cloud span { font-size: 13px; padding: 4px 8px; }
+}
+
+@media (max-width: 480px) {
+  .cloud img { width: 100px; }
+  .cloud span { font-size: 12px; padding: 3px 7px; }
+}
+</style>
+</head>
+
+<body class="skyMove">
+
+<div class="rain"></div>
+
+<!-- Mây và lời nhắn -->
+<div class="cloud" style="top: 5%; left: -200px;" data-msg="Hôm nay chị bé vất vả rồi.">
+  <img src="may.png" alt="cloud">
+  <span>Hôm nay chị bé vất vả rồi.</span>
+</div>
+
+<div class="cloud" style="top: 25%; left: -250px;" data-msg="Có những ngày không cần phải cố gắng quá nhiều, vẫn là một ngày đáng trân trọng">
+  <img src="may.png" alt="cloud">
+  <span>Có những ngày không cần phải cố gắng quá nhiều, vẫn là một ngày đáng trân trọng</span>
+</div>
+
+<div class="cloud" style="top: 45%; left: -220px;" data-msg="Ngày mai có thể chưa rực rỡ, nhưng sẽ nhẹ nhàng hơn hôm nay">
+  <img src="may.png" alt="cloud">
+  <span>Ngày mai có thể chưa rực rỡ, nhưng sẽ nhẹ nhàng hơn hôm nay</span>
+</div>
+
+<div class="cloud" style="top: 70%; left: -300px;" data-msg="Hôm nay chị bé là giỏi nhất, mọi nỗ lực đều xứng đáng được trân trọng">
+  <img src="may.png" alt="cloud">
+  <span>Hôm nay chị bé là giỏi nhất, mọi nỗ lực đều xứng đáng được trân trọng</span>
+</div>
+
+<div class="cloud" style="top: 22%; left: -280px;" data-msg="Hôm nay ngủ thật ngon nha">
+  <img src="may.png" alt="cloud">
+  <span>Hôm nay ngủ thật ngon nha</span>
+</div>
+
+<audio id="bgMusic" src="love.mp3" loop></audio>
+
+<script>
+// === Hiệu ứng mây ===
+const clouds = document.querySelectorAll('.cloud');
+clouds.forEach((cloud, i) => {
+  const duration = 25 + Math.random() * 15;
+  const delay = i * 4;
+  gsap.to(cloud, {
+    x: window.innerWidth + 400,
+    duration,
+    delay,
+    repeat: -1,
+    ease: "none"
+  });
+
+  const text = cloud.querySelector('span');
+  const offset = Math.random() * 5;
+  text.style.marginTop = `${offset}px`;
+
+  cloud.addEventListener('click', () => {
+    cloud.classList.add('active', 'showMsg');
+    gsap.to(cloud, { scale: 1.05, duration: 0.3, yoyo: true, repeat: 1 });
+    setTimeout(() => cloud.classList.remove('showMsg'), 4000);
+    setTimeout(() => cloud.classList.remove('active'), 800);
+  });
+});
+
+// === Giọt mưa thật ===
+function createRaindrop() {
+  const drop = document.createElement('img');
+  drop.src = 'mua.png';
+  drop.classList.add('drop');
+  document.body.appendChild(drop);
+
+  const startX = Math.random() * window.innerWidth;
+  const endY = window.innerHeight + 50;
+  const size = 6 + Math.random() * 10;
+  const speed = 2 + Math.random() * 2;
+
+  Object.assign(drop.style, {
+    left: startX + 'px',
+    top: '-20px',
+    width: size + 'px',
+    height: size + 'px',
+    opacity: 0.6 + Math.random() * 0.3
+  });
+
+  gsap.to(drop, {
+    y: endY,
+    duration: speed,
+    ease: "none",
+    onComplete: () => drop.remove()
+  });
+}
+
+// Tạo mưa liên tục (giảm tần suất trên mobile)
+const interval = window.innerWidth < 768 ? 250 : 150;
+setInterval(() => {
+  for (let i = 0; i < 4; i++) createRaindrop();
+}, interval);
+
+// === Phát nhạc khi người dùng chạm ===
+const bgMusic = document.getElementById('bgMusic');
+document.body.addEventListener('click', () => {
+  if (bgMusic.paused) bgMusic.play();
+});
+</script>
+
+</body>
+</html>
